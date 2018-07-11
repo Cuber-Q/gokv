@@ -1,12 +1,12 @@
-#gokv
+# gokv
 
 gokv是一个分布式K-V存储系统，类似[etcd](https://github.com/coreos/etcd)
 
 以GO语言编写，通过命令行进行操作
 
-##1、命令简介
+## 1、命令简介
 
-####1.1 服务端
+#### 1.1 服务端
 gokv 根命令帮助
 
 `$ gokv`
@@ -40,7 +40,7 @@ Flags:
   -P, --port int   specify server port (default 9901)
 ```
 
-####1.2 客户端
+#### 1.2 客户端
 
 gokv-cli 客户端命令行简介
 
@@ -74,23 +74,23 @@ gokv-cli>
 ```
 客户端命令行使用[go-prompt](https://github.com/c-bata/go-prompt)，提供交互式命令
 
-#####1.2.1 存储
+##### 1.2.1 存储
 
 ```bash
 gokv-cli>set mykey myvalue
 OK
 ```
-#####1.2.2 查询
+##### 1.2.2 查询
 ```bash
 gokv-cli>get mykey
 myvalue
 ```
 其他命令待补充...
 
-##2、集群模式(待补充)
+## 2、集群模式(待补充)
 
-###2.1 主从选举
+### 2.1 主从选举
 
-###2.2 数据同步
+### 2.2 数据同步
 
 ...
