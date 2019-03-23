@@ -3,8 +3,29 @@ package handler
 import (
 	"gokv/core"
 	"net/http"
+	"encoding/json"
 )
 
+// base http operation handler
+type BaseOp struct {
+}
+
+func resp(w http.ResponseWriter, data interface{}) {
+	header := w.Header()
+	header.Add("Content-Type", "application/json;charset=utf-8")
+
+	template := HttpResponseTemplate{Code : 200, Msg : "ok", Data: data}
+	enc := json.NewEncoder(w)
+	enc.Encode(template)
+}
+
+type HttpResponseTemplate struct {
+	Code int
+	Msg string
+	Data interface{}
+}
+
+// parse command from client http request and execute them
 type Op struct {
 	BaseOp
 }
@@ -23,7 +44,6 @@ func (op *Op) Get(w http.ResponseWriter, r *http.Request) {
 	key := r.Form.Get("key")
 
 	result := core.Get(key)
-
 	resp(w, result)
 }
 

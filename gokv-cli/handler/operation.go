@@ -7,9 +7,9 @@ import (
 
 func Set(key, value string) string {
 	url := buildUrl(SET)
-	resp, error := Client.Get(url + "?key=" + key + "&value=" + value)
-	if error != nil {
-		fmt.Println(error)
+	resp, e := Client.Get(url + "?key=" + key + "&value=" + value)
+	if e != nil {
+		fmt.Println(e)
 		return "ERROR"
 	}
 
@@ -31,9 +31,9 @@ func Set(key, value string) string {
 
 func Get(key string) string {
 	url := buildUrl(GET)
-	resp, error := Client.Get(url + "?key=" + key)
-	if error != nil {
-		fmt.Println(error)
+	resp, e := Client.Get(url + "?key=" + key)
+	if e != nil {
+		fmt.Println(e)
 		return "ERROR"
 	}
 
@@ -57,4 +57,9 @@ func Exist(key string) bool {
 
 func Keys() []string {
 	return []string{}
+}
+
+/*、cluster cmd */
+func Meet()  {
+	
 }

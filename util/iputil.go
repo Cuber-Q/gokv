@@ -21,9 +21,9 @@ func ValidIp(ip string) bool {
 				return false
 			}
 
-			n, error := strconv.Atoi(numbers[i])
-			if error != nil {
-				log.Println("invalid ip value: ", error)
+			n, e := strconv.Atoi(numbers[i])
+			if e != nil {
+				log.Println("invalid ip value: ", e)
 				return false
 			}
 
@@ -34,9 +34,9 @@ func ValidIp(ip string) bool {
 
 		}
 
-		n, error := strconv.Atoi(numbers[i])
-		if error != nil {
-			log.Println("invalid ip value: ", error)
+		n, e := strconv.Atoi(numbers[i])
+		if e != nil {
+			log.Println("invalid ip value: ", e)
 			return false
 		}
 
