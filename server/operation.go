@@ -1,9 +1,12 @@
-package handler
+package server
 
 import (
 	"gokv/core"
 	"net/http"
 	"encoding/json"
+	"fmt"
+	"time"
+	"log"
 )
 
 // base http operation handler
@@ -35,7 +38,26 @@ func (op *Op) Set(w http.ResponseWriter, r *http.Request) {
 	key := r.Form.Get("key")
 	value := r.Form.Get("value")
 
-	result := core.Set(key, value)
+
+	event := logEntryData{Key: key, Value: value}
+	eventBytes, err := json.Marshal(event)
+	if err != nil {
+		log.Printf("json.Marshal failed, err:%v", err)
+		fmt.Fprint(w, "internal error\n")
+		return
+	}
+
+	var result = "fail"
+	applyFuture := server.raft.raft.Apply(eventBytes, 5*time.Second)
+	if err := applyFuture.Error(); err != nil {
+		log.Printf("raft.Apply failed:%v", err)
+		fmt.Fprint(w, "internal error\n")
+		return
+	}else {
+		log.Printf("set op OK, raft.Apply OK")
+		fmt.Fprintf(w, "ok\n")
+		result = core.Set(key, value)
+	}
 	resp(w, result)
 }
 
@@ -62,4 +84,12 @@ func (op *Op) Keys(w http.ResponseWriter, r *http.Request) {
 
 func (op *Op) Echo(w http.ResponseWriter, r *http.Request) {
 	resp(w, "echo")
+}
+
+func (op *Op) AddNode(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	node := r.Form.Get("node")
+
+	result := AddNode(node)
+	resp(w, result)
 }

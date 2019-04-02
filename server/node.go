@@ -1,8 +1,9 @@
-package cluster
+package server
 
 import (
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type NodeRole int32
@@ -11,6 +12,8 @@ const (
 	MASTER  NodeRole = 0
 	FOLLOWER	NodeRole = 1
 )
+
+var mutex sync.Mutex
 
 func (r NodeRole) String() string {
 	switch r {
@@ -62,9 +65,15 @@ var cluster = &Cluster{
 	nodes: make([]*Node,0),
 }
 
-func AddNode(node *Node) bool {
+func GetCluster() *Cluster  {
+	return cluster
+}
+
+func (c *Cluster) AddNode(node *Node) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	cluster.nodes = append(cluster.nodes, node)
-	return true
 }
 
 

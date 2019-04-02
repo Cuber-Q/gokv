@@ -25,6 +25,7 @@ func init() {
 	RootCmd.AddCommand(
 		NewSetCmd(),
 		NewGetCmd(),
+		NewAddNodeCmd(),
 	)
 	RootCmd.PersistentFlags().StringVar(&config.Ctx.Endpoint,"endpoint", "127.0.0.1:9901","specify endponits")
 	cobra.EnablePrefixMatching = true

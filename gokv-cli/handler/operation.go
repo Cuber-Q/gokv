@@ -59,7 +59,26 @@ func Keys() []string {
 	return []string{}
 }
 
-/*、cluster cmd */
-func Meet()  {
-	
+/* cluster cmd */
+// for a leader node, to add a new node as its follower
+func AddNode(address string) string {
+	url := buildUrl(ADD_NODE)
+	resp, e := Client.Get(url + "?node=" + address)
+	if e != nil {
+		fmt.Println(e)
+		return "ERROR"
+	}
+
+	//var data []byte
+	//num, _ := resp.Body.Read(data)
+	defer resp.Body.Close()
+
+	getResp := new(GetResp)
+
+	json.NewDecoder(resp.Body).Decode(getResp)
+	//json.Unmarshal(data, getResp)
+	if getResp.Code == 200 {
+		return getResp.Data
+	}
+	return getResp.Msg
 }

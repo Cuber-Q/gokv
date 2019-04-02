@@ -2,11 +2,10 @@ package server
 
 import (
 	"reflect"
-	"gokv/server/handler"
 	"testing"
 )
 
-func getMethodParams(handler *handler.Op) {
+func getMethodParams(handler *Op) {
 	handlerType := reflect.TypeOf(handler)
 
 	// 遍历方法
@@ -32,7 +31,7 @@ func getMethodParams(handler *handler.Op) {
 }
 
 type Invoker struct {
-	op     *handler.Op
+	op     *Op
 	url    string
 	method *Method
 }
@@ -62,7 +61,7 @@ func (v *Invoker) invoke(args []interface{}) []reflect.Value {
 	return result
 }
 
-func Build(url string, handler *handler.Op, methodName string) *Invoker {
+func Build(url string, handler *Op, methodName string) *Invoker {
 	invoker := &Invoker{}
 	invoker.url = url
 	invoker.op = handler
@@ -70,7 +69,7 @@ func Build(url string, handler *handler.Op, methodName string) *Invoker {
 	return invoker
 }
 
-func buildMethod(handler *handler.Op, methodName string) *Method {
+func buildMethod(handler *Op, methodName string) *Method {
 	_method := &Method{}
 
 	handlerType := reflect.TypeOf(handler)
@@ -105,7 +104,7 @@ func buildMethod(handler *handler.Op, methodName string) *Method {
 }
 
 func TestNewRoute(t *testing.T) {
-	//op := &handler.Op{}
+	//op := &Op{}
 	//invoker := Build("/echo", op, "echo")
 	//
 	//key := "key"

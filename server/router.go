@@ -1,7 +1,6 @@
 package server
 
 import (
-	"gokv/server/handler"
 	"net/http"
 )
 
@@ -26,7 +25,7 @@ func newHttpMux() *HttpMux {
 }
 
 func routerInit() map[string]func(w http.ResponseWriter, r *http.Request) {
-	op := &handler.Op{}
+	op := &Op{}
 
 	opMap := make(map[string]func(w http.ResponseWriter, r *http.Request))
 	opMap["/set"] = op.Set
@@ -34,6 +33,7 @@ func routerInit() map[string]func(w http.ResponseWriter, r *http.Request) {
 	opMap["/exist"] = op.Exist
 	opMap["/keys"] = op.Keys
 	opMap["/echo"] = op.Echo
+	opMap["/addNode"] = op.AddNode
 
 	return opMap
 }

@@ -47,3 +47,25 @@ func ValidIp(ip string) bool {
 	}
 	return true
 }
+
+func ValidAddress(address string) bool {
+	add := strings.Split(address,":")
+	if len(add) != 2 {
+		return false
+	}
+
+	if !ValidIp(add[0]) {
+		return false
+	}
+
+	if _, e := strconv.Atoi(add[1]);e != nil {
+		return false
+	}
+
+	i, _ := strconv.Atoi(add[1])
+	if i <= 0 || i > 65535 {
+		return false
+	}
+
+	return true
+}

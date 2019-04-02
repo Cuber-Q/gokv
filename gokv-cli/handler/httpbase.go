@@ -15,6 +15,7 @@ const (
 	GET = "get"
 	EXIST = "exist"
 	KEYS = "keys"
+	ADD_NODE = "addNode"
 )
 
 func buildUrl(cmdConst string) string {
