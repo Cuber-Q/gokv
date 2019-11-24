@@ -1,42 +1,55 @@
 package server
 
 import (
-	"log"
 	"encoding/json"
-	"io"
 	"github.com/hashicorp/raft"
+	"gokv/core"
+	"io"
+	"log"
 )
 
-// need to implement raft.fsm interface to build our own Finite State Machine
+// need to implement raftNode.fsm interface to build our own Finite State Machine
 type FSM struct {
-	Ctx *Context
-	Log *log.Logger
+	Id      string
+	Ctx     *Context
+	Log     *log.Logger
+	Storage *core.Storage
 }
 
 type logEntryData struct {
-	Key   string
-	Value string
+	K string
+	V string
 }
 
 // Apply applies a Raft log entry to the key-value store.
 func (f *FSM) Apply(logEntry *raft.Log) interface{} {
+	log.Printf("%v recive log and ready to APPLY: %v ", f.Id, logEntry)
 	e := logEntryData{}
 	if err := json.Unmarshal(logEntry.Data, &e); err != nil {
-		panic("Failed unmarshaling Raft log entry. This is a bug.")
+		panic("Failed Unmarshal Raft log entry. This is a bug.")
 	}
-	//ret := f.ctx.st.cm.Set(e.Key, e.Value)
+	//ret := f.ctx.st.cm.Set(e.K, e.V)
 	//f.log.Printf("fms.Apply(), logEntry:%s, ret:%v\n", logEntry.Data, ret)
-	return true
+	//f.Storage.SetV2(e.K, e.V)
+	cmd := &core.StoreCMD{
+		K:      e.K,
+		V:      e.V,
+		T:      core.SET,
+		RespCh: make(chan string, 1),
+	}
+	f.Storage.SetV3(cmd)
+	if r := <-cmd.RespCh; r != "" {
+		return true
+	}
+	return false
 }
 
 // Snapshot returns a latest snapshot
 func (f *FSM) Snapshot() (raft.FSMSnapshot, error) {
-	//return &snapshot{cm: f.ctx.st.cm}, nil
-	return nil, nil
+	return &snapshot{storage: f.Storage}, nil
 }
 
 // Restore stores the key-value store to a previous state.
 func (f *FSM) Restore(serialized io.ReadCloser) error {
-	//return f.ctx.st.cm.UnMarshal(serialized)
-	return nil
+	return f.Storage.UnMarshal(serialized)
 }

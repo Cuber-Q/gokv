@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func getMethodParams(handler *Op) {
+func getMethodParams(handler *RestOp) {
 	handlerType := reflect.TypeOf(handler)
 
 	// 遍历方法
@@ -31,7 +31,7 @@ func getMethodParams(handler *Op) {
 }
 
 type Invoker struct {
-	op     *Op
+	op     *RestOp
 	url    string
 	method *Method
 }
@@ -51,9 +51,9 @@ type Method struct {
 }
 
 func (v *Invoker) invoke(args []interface{}) []reflect.Value {
-	in := make([]reflect.Value, v.method.methodType.NumIn() - 1)
+	in := make([]reflect.Value, v.method.methodType.NumIn()-1)
 
-	for i := 0; i< len(in); i++ {
+	for i := 0; i < len(in); i++ {
 		in[i] = reflect.ValueOf(args[i])
 	}
 
@@ -61,7 +61,7 @@ func (v *Invoker) invoke(args []interface{}) []reflect.Value {
 	return result
 }
 
-func Build(url string, handler *Op, methodName string) *Invoker {
+func Build(url string, handler *RestOp, methodName string) *Invoker {
 	invoker := &Invoker{}
 	invoker.url = url
 	invoker.op = handler
@@ -69,13 +69,13 @@ func Build(url string, handler *Op, methodName string) *Invoker {
 	return invoker
 }
 
-func buildMethod(handler *Op, methodName string) *Method {
+func buildMethod(handler *RestOp, methodName string) *Method {
 	_method := &Method{}
 
 	handlerType := reflect.TypeOf(handler)
 
 	method, ok := handlerType.MethodByName(methodName)
-	if ! ok {
+	if !ok {
 
 	}
 
@@ -83,13 +83,13 @@ func buildMethod(handler *Op, methodName string) *Method {
 
 	methodType := method.Type
 
-	args := make([]reflect.Value, methodType.NumIn()-1) // method params array
+	args := make([]reflect.Value, methodType.NumIn()-1)     // method params array
 	argsTypes := make([]reflect.Type, methodType.NumIn()-1) // method params array
 
 	// 遍历参数
 	//for j := 1; j < methodType.NumIn(); j++ {
-		//argType := methodType.In(j).Kind().String()
-		//append(argsTypes, argType)
+	//argType := methodType.In(j).Kind().String()
+	//append(argsTypes, argType)
 
 	//}
 
@@ -98,13 +98,12 @@ func buildMethod(handler *Op, methodName string) *Method {
 	_method.methodValue = methodObj
 	_method.methodType = methodType
 
-
 	methodObj.Call(args)
 	return _method
 }
 
 func TestNewRoute(t *testing.T) {
-	//op := &Op{}
+	//op := &RestOp{}
 	//invoker := Build("/echo", op, "echo")
 	//
 	//key := "key"
