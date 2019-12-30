@@ -20,5 +20,6 @@ require (
 	github.com/pkg/term v0.0.0-20180423043932-cda20d4ac917 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.1 // indirect
+	github.com/stretchr/testify v1.4.0
 	golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e // indirect
 )

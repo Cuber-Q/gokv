@@ -1,13 +1,13 @@
 package main
 
 import (
-	"gokv/cmd"
-	"os"
 	"fmt"
+	"gokv/server/cmd"
 	"log"
+	"os"
 )
 
-func init(){
+func init() {
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Lshortfile)
 }
 
